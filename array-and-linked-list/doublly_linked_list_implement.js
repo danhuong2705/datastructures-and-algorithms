@@ -133,7 +133,7 @@ class DoublyLinkedList {
   }
 
   //Insert a node with value at given index.
-  insert(value, index) {
+  insert(index,value) {
     let newNode = new Node(value);
     if (index < 0 || index > this.length) {
       return null;
