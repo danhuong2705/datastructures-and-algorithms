@@ -180,10 +180,9 @@ class DoublyLinkedList {
 const DEFAULT_HASTABLE_SIZE = 10;
 class HashTable {
   constructor() {
-    this.buckets = new Array(DEFAULT_HASTABLE_SIZE);
-    for (let i = 0; i < DEFAULT_HASTABLE_SIZE; i++) {
-      this.buckets[i] = new DoublyLinkedList();
-    }
+    this.buckets = new Array(DEFAULT_HASTABLE_SIZE)
+      .fill(null)
+      .map(() => new DoublyLinkedList());
   }
   hash(key) {
     return key % DEFAULT_HASTABLE_SIZE;
