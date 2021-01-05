@@ -187,27 +187,64 @@ class HashTable {
   hash(key) {
     return key % DEFAULT_HASTABLE_SIZE;
   }
+  find(linklist, key) {
+    let head = linklist.head;
+    while (head !== null) {
+      if (head.value.key == key) return head;
+      head = head.next;
+    }
+    return -1;
+  }
   add(key, value) {
     let position = this.hash(key);
-    this.buckets[position].pushFront(value);
+    let ll = this.buckets[position];
+    let node = this.find(ll, key);
+    if (node !== -1) {
+      node.value.value = value;
+    } else this.buckets[position].pushFront({ key, value });
   }
   has(key) {
-    return this.buckets[this.hash(key)].length > 0;
+    return this.find(this.buckets[this.hash(key)], key) !== -1;
   }
   get(key) {
-    if (!this.has(this.hash(key))) return -1;
-    return this.buckets[this.hash(key)].front().value;
+    if (!this.has(key)) return -1;
+    return this.find(this.buckets[this.hash(key)], key).value.value;
   }
   remove(key) {
-    this.buckets[this.hash(key)] = new DoublyLinkedList();
+    let position = this.hash(key);
+    let linklist = this.buckets[position];
+    if (linklist.length == 0) return null;
+    let removedNode = this.find(linklist, key);
+    if (removedNode === linklist.head) {
+      linklist.popFront();
+    } else if (removedNode === linklist.tail) {
+      linklist.popBack();
+    } else {
+      let prevRemovedNode = removedNode.prev;
+      let nextRemovedNode = removedNode.next;
+
+      removedNode.next = null;
+      removedNode.prev = null;
+
+      prevRemovedNode.next = nextRemovedNode;
+      nextRemovedNode.prev = prevRemovedNode;
+      this.length--;
+    }
   }
 }
 let hashTable = new HashTable();
 hashTable.add(1, 1);
 hashTable.add(2, 2);
 hashTable.add(2, 3);
+hashTable.add(11, 12345);
+
 console.log(hashTable.has(1));
 console.log(hashTable.has(3));
 console.log(hashTable.get(2));
+console.log(hashTable.get(11));
+console.log(hashTable.get(1));
 hashTable.remove(2);
 console.log(hashTable.get(2));
+hashTable.remove(1);
+console.log(hashTable.get(11));
+console.log(hashTable.get(1));
