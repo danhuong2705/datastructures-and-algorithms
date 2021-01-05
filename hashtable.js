@@ -176,3 +176,39 @@ class DoublyLinkedList {
     }
   }
 }
+
+const DEFAULT_HASTABLE_SIZE = 10;
+class HashTable {
+  constructor() {
+    this.buckets = new Array(DEFAULT_HASTABLE_SIZE);
+    for (let i = 0; i < DEFAULT_HASTABLE_SIZE; i++) {
+      this.buckets[i] = new DoublyLinkedList();
+    }
+  }
+  hash(key) {
+    return key % DEFAULT_HASTABLE_SIZE;
+  }
+  add(key, value) {
+    let position = this.hash(key);
+    this.buckets[position].pushFront(value);
+  }
+  has(key) {
+    return this.buckets[this.hash(key)].length > 0;
+  }
+  get(key) {
+    if (!this.has(this.hash(key))) return -1;
+    return this.buckets[this.hash(key)].front().value;
+  }
+  remove(key) {
+    this.buckets[this.hash(key)] = new DoublyLinkedList();
+  }
+}
+let hashTable = new HashTable();
+hashTable.add(1, 1);
+hashTable.add(2, 2);
+hashTable.add(2, 3);
+console.log(hashTable.has(1));
+console.log(hashTable.has(3));
+console.log(hashTable.get(2));
+hashTable.remove(2);
+console.log(hashTable.get(2));
