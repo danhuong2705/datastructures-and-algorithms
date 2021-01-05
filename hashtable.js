@@ -197,8 +197,8 @@ class HashTable {
   }
   add(key, value) {
     let position = this.hash(key);
-    let ll = this.buckets[position];
-    let node = this.find(ll, key);
+    let linklist = this.buckets[position];
+    let node = this.find(linklist, key);
     if (node !== -1) {
       node.value.value = value;
     } else this.buckets[position].pushFront({ key, value });
